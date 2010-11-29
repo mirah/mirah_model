@@ -29,12 +29,15 @@ task :compile => :init do
   mirahc 'com/google/appengine', :dir => 'src', :dest => 'build'
 end
 
+desc "run tests"
 task :compile_test => :jar do
   puts "Compiling Duby tests"
   mirahc 'com/google/appengine', :dir => 'test', :dest => 'test',
          :options => ['--classpath', Dir.pwd + "/dist/dubydatastore.jar"]
 end
 
+
+desc "build jar"
 task :jar => :compile do
   ant.jar :jarfile => 'dist/dubydatastore.jar' do
     fileset :dir => 'lib'
