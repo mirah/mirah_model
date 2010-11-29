@@ -24,12 +24,12 @@ You can set instances by updating their attrs individually,
 
 or by using the update method and passing a hash
 
-   shout = Shout.new.update title: 'foo', body: 'bar'
-   shout.save
+    shout = Shout.new.update title: 'foo', body: 'bar'
+    shout.save
 
 Development
 ------------
 
 You can build the jar by running:
 
-  rake jar
+   rake jar
