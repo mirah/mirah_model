@@ -1,5 +1,13 @@
 require 'ant'
 require 'appengine-sdk'
+require 'rubygems'
+require 'rubygems/package_task'
+
+
+Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
+  pkg.need_zip = true
+  pkg.need_tar = true
+end
 
 $: << '../../../lib'
 require 'mirah_task'
