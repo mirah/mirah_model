@@ -1,16 +1,14 @@
-require 'ant'
-require 'appengine-sdk'
 require 'rubygems'
 require 'rubygems/package_task'
+require 'ant'
+require 'appengine-sdk'
+require 'mirah_task'
 
 
 Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
   pkg.need_zip = true
   pkg.need_tar = true
 end
-
-$: << '../../../lib'
-require 'mirah_task'
 
 JUNIT_JAR = '../../../javalib/junit.jar'
 TESTING_JARS = [AppEngine::SDK::API_JAR, AppEngine::SDK::LABS_JAR, JUNIT_JAR] +
@@ -34,16 +32,15 @@ end
 task :compile => :init do
   # build the Duby sources
   puts "Compiling Duby sources"
-  mirahc 'com/google/appengine', :dir => 'src', :dest => 'build'
+  mirahc '.', :dir => 'src', :dest => 'build'
 end
 
 desc "run tests"
 task :compile_test => :jar do
   puts "Compiling Duby tests"
-  mirahc 'com/google/appengine', :dir => 'test', :dest => 'test',
+  mirahc '.', :dir => 'test', :dest => 'test',
          :options => ['--classpath', Dir.pwd + "/dist/dubydatastore.jar"]
 end
-
 
 desc "build jar"
 task :jar => :compile do

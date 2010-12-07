@@ -1,3 +1,5 @@
+package com.google.appengine.ext.duby.db
+
 import java.util.ConcurrentModificationException
 
 import com.google.appengine.api.datastore.DatastoreServiceFactory
@@ -89,7 +91,7 @@ class Model
     # the datastore plugin's JAR. So as long as Model is in your CLASSPATH
     # you don't need any extra arguments to dubyc.
     code = <<RUBY
-      require 'com/google/appengine/ext/duby/db/datastore.rb'
+      require 'datastore.rb'
       AppEngine::DubyDatastorePlugin.add_property(*arg.to_a)
 RUBY
     @mirah.__ruby_eval(code, [name, type, @mirah, @call])

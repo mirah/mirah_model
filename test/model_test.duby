@@ -1,3 +1,5 @@
+package com.google.appengine.ext.duby.db
+
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig
 import com.google.appengine.tools.development.testing.LocalServiceTestConfig
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper
