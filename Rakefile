@@ -10,6 +10,8 @@ Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
   pkg.need_tar = true
 end
 
+task :gem => :jar
+
 JUNIT_JAR = '../../../javalib/junit.jar'
 TESTING_JARS = [AppEngine::SDK::API_JAR, AppEngine::SDK::LABS_JAR, JUNIT_JAR] +
   AppEngine::SDK::RUNTIME_JARS.reject {|j| j =~ /appengine-local-runtime/}
