@@ -48,7 +48,7 @@ class DQuery
     end
   end
 
-  def sort(name:String, descending=false):void
+  def _sort(name:String, descending=false):void
     if descending
       @query.addSort(name, _desc)
     else
@@ -91,7 +91,7 @@ class Model
     # the datastore plugin's JAR. So as long as Model is in your CLASSPATH
     # you don't need any extra arguments to dubyc.
     code = <<RUBY
-      require 'datastore.rb'
+      require 'mirah_model/datastore'
       AppEngine::DubyDatastorePlugin.add_property(*arg.to_a)
 RUBY
     @mirah.__ruby_eval(code, [name, type, @mirah, @call])

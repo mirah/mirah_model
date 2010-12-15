@@ -1,0 +1,24 @@
+PATH
+  remote: .
+  specs:
+    mirah_model (0.0.1-java)
+      appengine-sdk (~> 1.4.0)
+      mirah (>= 0.0.4)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    appengine-sdk (1.4.0)
+    bitescript (0.0.7)
+    junit.junit (4.8.2-java)
+    mirah (0.0.4-java)
+      bitescript (>= 0.0.6)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  appengine-sdk (~> 1.4.0)
+  junit.junit
+  mirah (>= 0.0.4)
+  mirah_model!

@@ -11,13 +11,15 @@ Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
 end
 
 task :gem => :jar
-
-JUNIT_JAR = '../../../javalib/junit.jar'
-TESTING_JARS = [AppEngine::SDK::API_JAR, AppEngine::SDK::LABS_JAR, JUNIT_JAR] +
+#require 'maven/junit/junit'
+# -- will work after maven support --JUNIT_JAR = Gem.find_files('maven/junit/junit.jar').first
+JUNIT_JAR = 'javalib/junit.jar'
+TESTING_JARS = [AppEngine::SDK::API_JAR, AppEngine::SDK::LABS_JAR, JUNIT_JAR
+] +
   AppEngine::SDK::RUNTIME_JARS.reject {|j| j =~ /appengine-local-runtime/}
 TESTING_JARS.each {|jar| $CLASSPATH << jar}
 
-# Duby.compiler_options = ['-V']
+# Mirah.compiler_options = ['-V']
 
 task :default => :test
 
