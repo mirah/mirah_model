@@ -2,3 +2,4 @@ dist/*
 build/*
 *.gem
 test/*.class
+test/com
