@@ -1,4 +1,4 @@
-package com.google.appengine.ext.duby.db
+package com.google.appengine.ext.mirah.db
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig
 import com.google.appengine.tools.development.testing.LocalServiceTestConfig

@@ -34,21 +34,21 @@ task :clean do
 end
 
 task :compile => :init do
-  # build the Duby sources
-  puts "Compiling Duby sources"
+  # build the Mirah sources
+  puts "Compiling Mirah sources"
   mirahc '.', :dir => 'src', :dest => 'build'
 end
 
 desc "run tests"
 task :compile_test => :jar do
-  puts "Compiling Duby tests"
+  puts "Compiling Mirah tests"
   mirahc '.', :dir => 'test', :dest => 'test',
-         :options => ['--classpath', Dir.pwd + "/dist/dubydatastore.jar"]
+         :options => ['--classpath', Dir.pwd + "/dist/mirahdatastore.jar"]
 end
 
 desc "build jar"
 task :jar => :compile do
-  ant.jar :jarfile => 'dist/dubydatastore.jar' do
+  ant.jar :jarfile => 'dist/mirahdatastore.jar' do
     fileset :dir => 'lib'
     fileset :dir => 'build'
   end

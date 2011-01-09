@@ -1,4 +1,4 @@
-package com.google.appengine.ext.duby.db
+package com.google.appengine.ext.mirah.db
 
 import java.util.ConcurrentModificationException
 
@@ -89,10 +89,10 @@ class Model
     # This is a hack to make packaging possible.
     # Everything's still written in ruby, but we load it out of
     # the datastore plugin's JAR. So as long as Model is in your CLASSPATH
-    # you don't need any extra arguments to dubyc.
+    # you don't need any extra arguments to mirahc.
     code = <<RUBY
       require 'mirah_model/datastore'
-      AppEngine::DubyDatastorePlugin.add_property(*arg.to_a)
+      AppEngine::MirahDatastorePlugin.add_property(*arg.to_a)
 RUBY
     @mirah.__ruby_eval(code, [name, type, @mirah, @call])
   end

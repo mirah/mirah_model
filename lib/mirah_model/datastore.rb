@@ -1,5 +1,5 @@
 module AppEngine
-  class DubyDatastorePlugin
+  class MirahDatastorePlugin
     @models = {}
 
     TypeMap = {
@@ -51,7 +51,7 @@ module AppEngine
     }
 
     class ModelState
-      include Duby::AST
+      include Mirah::AST
       attr_reader :kind, :query, :read, :save, :transformer
 
       def initialize(transformer, klass, parent, position, ast)
@@ -109,7 +109,7 @@ module AppEngine
               self
             end
           EOF
-          [Duby::AST.type(nil, 'com.google.appengine.ext.duby.db.DQuery'),
+          [Mirah::AST.type(nil, 'com.google.appengine.ext.mirah.db.DQuery'),
            eval(classdef, queryinit)]
         end
         ast << @query
@@ -131,7 +131,7 @@ module AppEngine
           end
         EOF
         @get_properties = get_properties.body.children[1] =
-            Duby::AST::Body.new(get_properties.body, position)
+            Mirah::AST::Body.new(get_properties.body, position)
         ast << get_properties
         update = eval(parent, <<-EOF)
           def update(properties:Map)
@@ -260,7 +260,7 @@ module AppEngine
     end
 
     def self.find_class(node)
-      node = node.parent until Duby::AST::ClassDefinition === node
+      node = node.parent until Mirah::AST::ClassDefinition === node
       node
     end
 
@@ -275,9 +275,9 @@ module AppEngine
     end
 
     def self.from_datastore(type, value)
-      duby_type = TypeMap[type]
-      if duby_type
-        default = Defaults.fetch(type, "#{duby_type}(nil)")
+      mirah_type = TypeMap[type]
+      if mirah_type
+        default = Defaults.fetch(type, "#{mirah_type}(nil)")
         conversion = Conversions[type]
         "(#{value} ? #{type}(#{value}).#{conversion} : #{default})"
       else
@@ -296,7 +296,7 @@ module AppEngine
       type = type.name
       type = 'Long' if type == 'Integer'
 
-      result = Duby::AST::ScopedBody.new(parent, fcall.position) {[]}
+      result = Mirah::AST::ScopedBody.new(parent, fcall.position) {[]}
       result.static_scope = fcall.scope.static_scope
       klass = find_class(parent)
       unless @models[klass]
@@ -305,10 +305,10 @@ module AppEngine
       end
       model = @models[klass]
 
-      duby_type = TypeMap.fetch(type, type)
-      coercion = "coerce_" + duby_type.downcase.sub("[]", "s")
+      mirah_type = TypeMap.fetch(type, type)
+      coercion = "coerce_" + mirah_type.downcase.sub("[]", "s")
 
-      if duby_type == 'List'
+      if mirah_type == 'List'
         model.extend_query(<<-EOF)
           def #{name}(value:Object)
             returns :void
@@ -317,7 +317,7 @@ module AppEngine
         EOF
       else
         model.extend_query(<<-EOF)
-          def #{name}(value:#{duby_type})
+          def #{name}(value:#{mirah_type})
             returns :void
             _query.addFilter("#{name}", _eq_op, #{to_datastore(type, 'value')})
           end
@@ -339,7 +339,7 @@ module AppEngine
       EOF
 
       model.extend_get_properties(<<-EOF)
-        result.put("#{name}", #{maybe_box(duby_type, 'self.' + name)})
+        result.put("#{name}", #{maybe_box(mirah_type, 'self.' + name)})
       EOF
 
       result << model.eval(parent, <<-EOF)
@@ -347,7 +347,7 @@ module AppEngine
           @#{name}
         end
 
-        def #{name}=(value:#{duby_type})
+        def #{name}=(value:#{mirah_type})
           @#{name} = value
         end
 
@@ -359,9 +359,9 @@ module AppEngine
       result
     end
 
-    def self.maybe_box(duby_type, value)
-      if Boxes.include?(duby_type)
-        "#{Boxes[duby_type]}.valueOf(#{value})"
+    def self.maybe_box(mirah_type, value)
+      if Boxes.include?(mirah_type)
+        "#{Boxes[mirah_type]}.valueOf(#{value})"
       else
         value
       end
@@ -371,5 +371,5 @@ module AppEngine
       @models = {}
     end
   end
-  ::Duby.plugins << DubyDatastorePlugin
+  ::Mirah.plugins << MirahDatastorePlugin
 end
