@@ -36,7 +36,9 @@ end
 task :compile => :init do
   # build the Duby sources
   puts "Compiling Duby sources"
-  mirahc '.', :dir => 'src', :dest => 'build'
+  mirahc 'meta_model.mirah', :dir => 'src', :dest => 'build'
+  mirahc 'model.mirah', :dir => 'src', :dest => 'build',
+         :options => ['--classpath', Dir.pwd + "/build/"]
 end
 
 desc "run tests"
@@ -49,7 +51,6 @@ end
 desc "build jar"
 task :jar => :compile do
   ant.jar :jarfile => 'dist/dubydatastore.jar' do
-    fileset :dir => 'lib'
     fileset :dir => 'build'
   end
 end
