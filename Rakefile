@@ -4,7 +4,6 @@ require 'ant'
 require 'appengine-sdk'
 require 'mirah_task'
 
-
 Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
   pkg.need_zip = true
   pkg.need_tar = true
@@ -36,13 +35,13 @@ end
 task :compile => :init do
   # build the Mirah sources
   puts "Compiling Mirah sources"
-  mirahc '.', :dir => 'src', :dest => 'build'
+  mirahc 'src/', :dir => 'src', :dest => 'build'
 end
 
 desc "run tests"
 task :compile_test => :jar do
   puts "Compiling Mirah tests"
-  mirahc '.', :dir => 'test', :dest => 'test',
+  mirahc 'test/', :dir => 'test', :dest => 'test',
          :options => ['--classpath', Dir.pwd + "/dist/mirahdatastore.jar"]
 end
 

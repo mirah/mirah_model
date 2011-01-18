@@ -29,6 +29,7 @@ or by using the update method and passing a hash
 
 Development
 ------------
+Requires Mirah 0.0.6(unreleased) to compile
 
 You can build the jar by running:
 
