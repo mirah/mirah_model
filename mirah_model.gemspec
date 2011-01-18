@@ -18,6 +18,5 @@ Gem::Specification.new do |s|
   #s.test_files = Dir["test/**/test*.rb"]
   s.platform = "java"
   s.add_dependency("mirah", ">= 0.0.4")
-  s.add_dependency("appengine-sdk", "~> 1.4.0")
-#--waiting on maven/gem support  s.add_development_dependency("junit.junit")
+  s.add_dependency("appengine-sdk", "~> 1.4.0")  
 end

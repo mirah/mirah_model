@@ -29,7 +29,7 @@ or by using the update method and passing a hash
 
 Development
 ------------
-Requires Mirah 0.0.6(unreleased) to compile
+Requires Mirah 0.0.6(unreleased) and JRuby 1.6 to compile and test.
 
 You can build the jar by running:
 

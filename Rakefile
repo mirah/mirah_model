@@ -1,6 +1,9 @@
 require 'rubygems'
 require 'rubygems/package_task'
+require 'bundler/setup'
+
 require 'ant'
+require 'maven/junit/junit'
 require 'appengine-sdk'
 require 'mirah_task'
 
@@ -10,12 +13,12 @@ Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
 end
 
 task :gem => :jar
-#require 'maven/junit/junit'
-# -- will work after maven support --JUNIT_JAR = Gem.find_files('maven/junit/junit.jar').first
-JUNIT_JAR = 'javalib/junit.jar'
-TESTING_JARS = [AppEngine::SDK::API_JAR, AppEngine::SDK::LABS_JAR, JUNIT_JAR
-] +
-  AppEngine::SDK::RUNTIME_JARS.reject {|j| j =~ /appengine-local-runtime/}
+
+TESTING_JARS = [AppEngine::SDK::API_JAR,
+                AppEngine::SDK::LABS_JAR,
+                *AppEngine::SDK::RUNTIME_JARS.reject {|j| j =~ /appengine-local-runtime/}
+              ]
+              
 TESTING_JARS.each {|jar| $CLASSPATH << jar}
 
 # Mirah.compiler_options = ['-V']
@@ -35,13 +38,13 @@ end
 task :compile => :init do
   # build the Mirah sources
   puts "Compiling Mirah sources"
-  mirahc 'src/', :dir => 'src', :dest => 'build'
+  mirahc File.expand_path('src/'), :dir => 'src', :dest => 'build'
 end
 
 desc "run tests"
 task :compile_test => :jar do
   puts "Compiling Mirah tests"
-  mirahc 'test/', :dir => 'test', :dest => 'test',
+  mirahc File.expand_path('test/'), :dir => 'test', :dest => 'test',
          :options => ['--classpath', Dir.pwd + "/dist/mirahdatastore.jar"]
 end
 
