@@ -1,4 +1,6 @@
 dist/*
 build/*
 *.gem
-test/*.class
+test/**/*.class
+test/com
+.redcar
