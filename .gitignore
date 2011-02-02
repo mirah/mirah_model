@@ -4,3 +4,4 @@ build/*
 test/**/*.class
 test/com
 .redcar
+Gemfile.lock
