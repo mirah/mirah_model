@@ -22,7 +22,7 @@ TESTING_JARS = [AppEngine::SDK::API_JAR,
               
 TESTING_JARS.each {|jar| $CLASSPATH << jar}
 
-# Mirah.compiler_options = ['-V']
+#Mirah.compiler_options = ['-V']
 
 task :default => :test
 
@@ -39,14 +39,16 @@ end
 task :compile => :init do
   # build the Mirah sources
   puts "Compiling Mirah sources"
-  mirahc 'src/', :dir => 'src', :dest => 'build'
+  args = Dir['src/**/*.{mirah,duby}'] + [{ :dir => 'src', :dest => 'build'}]
+  mirahc *args
 end
 
 desc "run tests"
 task :compile_test => :jar do
   puts "Compiling Mirah tests"
-  mirahc 'test/', :dir => 'test', :dest => 'test',
-         :options => ['--classpath', Dir.pwd + "/dist/mirahdatastore.jar"]
+  args = Dir['test/**/*.{mirah,duby}'] + [{ :dir => 'test', :dest => 'test',
+         :options => ['--classpath', Dir.pwd + "/dist/mirahdatastore.jar"]}]
+  mirahc *args  
 end
 
 desc "build jar"
