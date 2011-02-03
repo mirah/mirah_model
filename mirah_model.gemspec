@@ -8,7 +8,8 @@ Gem::Specification.new do |s|
   s.email = ["ribrdb@google.com"]
   s.extra_rdoc_files = ["README.md"]
 
-  files = Dir["{lib,test}/**/*","{*.md,Rakefile}"]
+  files = Dir["{lib,test}/**/*","{*.md,Rakefile}"] +
+  ['lib/mirahdatastore.jar']
   s.files = files
   s.homepage = %q{http://www.mirah.org/}
   s.rdoc_options = ["--main", "README.md"]

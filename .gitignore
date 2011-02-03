@@ -5,3 +5,4 @@ test/**/*.class
 test/com
 .redcar
 Gemfile.lock
+lib/mirahdatastore.jar

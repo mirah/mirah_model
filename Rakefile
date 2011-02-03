@@ -10,7 +10,6 @@ Gem::PackageTask.new Gem::Specification.load('mirah_model.gemspec') do |pkg|
   pkg.need_tar = true
 end
 
-task :gem => :jar
 #require 'maven/junit/junit'
 # -- will work after maven support --JUNIT_JAR = Gem.find_files('maven/junit/junit.jar').first
 
@@ -26,8 +25,7 @@ TESTING_JARS.each {|jar| $CLASSPATH << jar}
 
 task :default => :test
 
-task :init do
-  mkdir_p 'dist'
+task :init do  
   mkdir_p 'build'
 end
 
@@ -47,14 +45,18 @@ desc "run tests"
 task :compile_test => :jar do
   puts "Compiling Mirah tests"
   args = Dir['test/**/*.{mirah,duby}'] + [{ :dir => 'test', :dest => 'test',
-         :options => ['--classpath', Dir.pwd + "/dist/mirahdatastore.jar"]}]
+         :options => ['--classpath', Dir.pwd + "/lib/mirahdatastore.jar"]}]
   mirahc *args  
 end
 
+file 'lib/mirahdatastore.jar' => :jar
+
 desc "build jar"
 task :jar => :compile do
-  ant.jar :jarfile => 'dist/mirahdatastore.jar' do
-    fileset :dir => 'lib'
+  ant.jar :jarfile => 'lib/mirahdatastore.jar' do
+    fileset :dir => 'lib' do
+      exclude :name => '*.jar'
+    end
     fileset :dir => 'build'
   end
 end
