@@ -1,20 +1,44 @@
+# Copyright (c) 2010 The Mirah project authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations
+
 package com.google.appengine.ext.mirah.db
 
 import java.util.ConcurrentModificationException
 
+import com.google.appengine.api.datastore.Blob
+import com.google.appengine.api.datastore.Category
 import com.google.appengine.api.datastore.DatastoreServiceFactory
+import com.google.appengine.api.datastore.Email
 import com.google.appengine.api.datastore.Entity
 import com.google.appengine.api.datastore.EntityNotFoundException
-import com.google.appengine.api.datastore.Key
-import com.google.appengine.api.datastore.KeyFactory
-import com.google.appengine.api.datastore.Query
-import 'Builder', 'com.google.appengine.api.datastore.FetchOptions$Builder'
-import 'FilterOperator', 'com.google.appengine.api.datastore.Query$FilterOperator'
-import 'SortDirection', 'com.google.appengine.api.datastore.Query$SortDirection'
+import com.google.appengine.api.datastore.FetchOptions.Builder
 import com.google.appengine.api.datastore.GeoPt
 import com.google.appengine.api.datastore.IMHandle
+import com.google.appengine.api.datastore.Key
+import com.google.appengine.api.datastore.KeyFactory
+import com.google.appengine.api.datastore.Link
+import com.google.appengine.api.datastore.PhoneNumber
+import com.google.appengine.api.datastore.PostalAddress
+import com.google.appengine.api.datastore.Query
+import com.google.appengine.api.datastore.Query.FilterOperator
+import com.google.appengine.api.datastore.Query.SortDirection
+import com.google.appengine.api.datastore.Rating
+import com.google.appengine.api.datastore.ShortBlob
+import com.google.appengine.api.datastore.Text
 import com.google.appengine.api.users.User
 
+import duby.lang.compiler.StringNode
 import java.util.Arrays
 import java.util.Date
 import java.util.HashMap
@@ -48,7 +72,7 @@ class DQuery
     end
   end
 
-  def _sort(name:String, descending=false):void
+  def sort(name:String, descending=false):void
     if descending
       @query.addSort(name, _desc)
     else
@@ -85,16 +109,8 @@ class DQuery
 end
 
 class Model
-  defmacro property(name, type) do
-    # This is a hack to make packaging possible.
-    # Everything's still written in ruby, but we load it out of
-    # the datastore plugin's JAR. So as long as Model is in your CLASSPATH
-    # you don't need any extra arguments to mirahc.
-    code = <<RUBY
-      require 'mirah_model/datastore'
-      AppEngine::MirahDatastorePlugin.add_property(*arg.to_a)
-RUBY
-    @mirah.__ruby_eval(code, [name, type, @mirah, @call])
+  macro def property(name, type)
+    DubyDatastorePlugin.get(@mirah).add_property(name, type, @call)
   end
 
   def initialize; end
@@ -305,6 +321,47 @@ RUBY
   end
 
   # TODO coerce arrays to lists?
+
+  macro def simple_loader(type_node)
+    type = type_node.string_value
+    name = "load_#{type.toLowerCase}"
+    quote do
+      def `name`(value:Object) #`
+        `@mirah.cast(type, 'value')`
+      end
+    end
+  end
+
+  macro def converting_loader(from_node, converter)
+    from = from_node.string_value
+    name = "load_#{from.toLowerCase}"
+    quote do
+      def `name`(value:Object)  #`
+        result = `@mirah.cast(from, 'value')`.`converter` if value
+        result
+      end
+    end
+  end
+
+  simple_loader('Date')
+  simple_loader('GeoPt')
+  simple_loader('IMHandle')
+  simple_loader('Key')
+  simple_loader('List')
+  simple_loader('String')
+  simple_loader('User')
+  converting_loader('Category', 'getCategory')
+  converting_loader('Email', 'getEmail')
+  converting_loader('Link', 'getValue')
+  converting_loader('PhoneNumber', 'getNumber')
+  converting_loader('PostalAddress', 'getAddress')
+  converting_loader('Text', 'getValue')
+  converting_loader('Blob', 'getBytes')
+  converting_loader('ShortBlob', 'getBytes')
+  converting_loader('Long', 'longValue')
+  converting_loader('Double', 'doubleValue')
+  converting_loader('Boolean', 'booleanValue')
+  converting_loader('Rating', 'getRating')
 
   def before_save; end
 

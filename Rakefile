@@ -37,8 +37,15 @@ end
 task :compile => :init do
   # build the Mirah sources
   puts "Compiling Mirah sources"
-  args = Dir['src/**/*.{mirah,duby}'] + [{ :dir => 'src', :dest => 'build'}]
-  mirahc *args
+#  args = Dir['src/**/*.{mirah,duby}'] + [{ :dir => 'src', :dest => 'build',:options => ['-V']}]
+#  mirahc *args
+#=======
+#  # build the Duby sources
+#  puts "Compiling Duby sources"
+  mirahc 'meta_model.mirah', :dir => 'src', :dest => 'build'
+  mirahc 'model.mirah', :dir => 'src', :dest => 'build',
+         :options => ['--classpath', Dir.pwd + "/build/"]
+#>>>>>>> 4b793b085e8d7d5bad6b91eeb90d84a5f0a0d962
 end
 
 desc "run tests"
