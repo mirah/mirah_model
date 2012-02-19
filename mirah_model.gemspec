@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Mirah Model is a ORM library for App Engine's datastore.}
   #s.test_files = Dir["test/**/test*.rb"]
   s.platform = "java"
-  s.add_dependency("mirah", "= 0.0.5")
+  s.add_dependency("mirah", ">= 0.0.5")
   s.add_dependency("appengine-sdk", "~> 1.4.0")
 #--waiting on maven/gem support  s.add_development_dependency("junit.junit")
 end
