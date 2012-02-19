@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.name = 'mirah_model'
   s.version = "0.0.3.dev"
   s.authors = ["Ryan Brown"]
-  s.date = Time.now.strftime("YYYY-MM-DD")
+  s.date = Time.now.strftime("%Y-%m-%d")
   s.description = %q{Mirah Model is a ORM library for App Engine's datastore. It is inspired by ActiveRecord and DataMapper. It's used by Dubious, a Rails-ish web framework.}
   s.email = ["ribrdb@google.com"]
   s.extra_rdoc_files = ["README.md"]
